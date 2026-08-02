@@ -66,6 +66,9 @@
   .muted{color:var(--muted);}
   .small{font-size:.85rem;}
 
+  .lang{display:flex; gap:.35rem; justify-content:flex-end; padding-top:1rem; margin-bottom:-1.6rem;}
+  .lang a{font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .55rem;}
+  .lang a.on{background:var(--node); color:var(--node-ink); border-color:var(--node);}
   header.hero{padding:2.6rem 0 1.4rem; border-bottom:3px double var(--line);}
   .hero .sub{font-size:1.08rem; max-width:60ch; margin-top:.5rem;}
 
@@ -153,6 +156,8 @@
 <body>
 
 <div class="wrap">
+
+<nav class="lang" aria-label="Idioma"><a class="on" href="index.html" lang="es">ES</a><a href="en.html" lang="en">EN</a><a href="nl.html" lang="nl">NL</a></nav>
 
 <header class="hero">
   <p class="eyebrow">Plan de viaje · detox a pedal · versión norte</p>
