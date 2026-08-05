@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Detox on foot v3 — car version: slow bases, walks through forests and parks, and four Jewish communities across the Dutch interior, from Shabbat to Shabbat.">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Detox on foot v3 — car version · 10 Aug → 8 Sep 2026</title>
+<style>
+  :root{
+    --ground:#f5f6f0; --panel:#fcfcf8; --ink:#212820; --muted:#5c675a;
+    --line:#d8dccd; --node:#2d6a45; --node-ink:#ffffff;
+    --verde:#2d6a45; --ladrillo:#a8432c; --agua:#43677f;
+    --oro:#8f6c1d; --oro-bg:#f4ebd4; --oro-line:#dfd0a4;
+    --chip-bg:#e9ece1; --alert-bg:#f4e4de;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#141813; --panel:#1b211a; --ink:#e6eae0; --muted:#9ba795;
+      --line:#2d352b; --node:#356f4c; --node-ink:#f2f6ee;
+      --verde:#72b08c; --ladrillo:#d78f77; --agua:#8fb2c8;
+      --oro:#d4ae60; --oro-bg:#272113; --oro-line:#4a3d1e;
+      --chip-bg:#252c23; --alert-bg:#31211c;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#141813; --panel:#1b211a; --ink:#e6eae0; --muted:#9ba795;
+    --line:#2d352b; --node:#356f4c; --node-ink:#f2f6ee;
+    --verde:#72b08c; --ladrillo:#d78f77; --agua:#8fb2c8;
+    --oro:#d4ae60; --oro-bg:#272113; --oro-line:#4a3d1e;
+    --chip-bg:#252c23; --alert-bg:#31211c;
+  }
+  :root[data-theme="light"]{
+    --ground:#f5f6f0; --panel:#fcfcf8; --ink:#212820; --muted:#5c675a;
+    --line:#d8dccd; --node:#2d6a45; --node-ink:#ffffff;
+    --verde:#2d6a45; --ladrillo:#a8432c; --agua:#43677f;
+    --oro:#8f6c1d; --oro-bg:#f4ebd4; --oro-line:#dfd0a4;
+    --chip-bg:#e9ece1; --alert-bg:#f4e4de;
+  }
+  html{background:var(--ground);}
+  body{
+    font-family:Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+    color:var(--ink); line-height:1.55; margin:0; padding:0 1.1rem 4rem;
+    font-size:1.02rem;
+  }
+  .wrap{max-width:860px; margin:0 auto;}
+  a{color:var(--agua); text-decoration-thickness:1px; text-underline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--verde); outline-offset:2px; border-radius:2px;}
+
+  .ut, th, .chip, .nodo, .eyebrow, .fecha, .stat b, .stat span, .ck-num{
+    font-family:"Avenir Next",Avenir,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  .eyebrow{
+    text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; font-weight:600;
+    color:var(--verde); margin:0 0 .3rem;
+  }
+  h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; text-wrap:balance; line-height:1.15;}
+  h1{font-size:clamp(1.9rem,5vw,2.7rem); margin:.2rem 0 .4rem; font-weight:700;}
+  h2{font-size:1.45rem; margin:0 0 .8rem;}
+  h3{font-size:1.12rem; margin:1.4rem 0 .5rem;}
+  p{margin:.55rem 0; max-width:68ch;}
+  .muted{color:var(--muted);}
+  .small{font-size:.85rem;}
+
+  .switch{display:flex; gap:.35rem; align-items:center; padding-top:1rem; flex-wrap:wrap;}
+  .switch a, .switch span.on{font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .55rem;}
+  .switch span.on{background:var(--node); color:var(--node-ink); border-color:var(--node);}
+  .switch .lbl{border:none; padding:0 .2rem 0 0; color:var(--muted); font-weight:600; letter-spacing:.1em; text-transform:uppercase; font-size:.66rem;}
+  .lang{display:flex; gap:.35rem; justify-content:flex-end; margin-bottom:-1.6rem;}
+  .lang a{font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .55rem;}
+  .lang a.on{background:var(--node); color:var(--node-ink); border-color:var(--node);}
+  header.hero{padding:1.4rem 0 1.4rem; border-bottom:3px double var(--line);}
+  .hero .sub{font-size:1.08rem; max-width:60ch; margin-top:.5rem;}
+
+  section{margin:2.4rem 0; scroll-margin-top:1rem;}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:.7rem; margin:1.4rem 0 0;}
+  .stat{background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:.7rem .8rem;}
+  .stat b{display:block; font-size:1.35rem; font-weight:700; font-variant-numeric:tabular-nums;}
+  .stat span{font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);}
+
+  .ruta{display:flex; flex-wrap:wrap; gap:.35rem .2rem; align-items:center; margin:.8rem 0 0;}
+  .ruta .chip{background:var(--chip-bg); border:1px solid var(--line); border-radius:999px; padding:.18rem .6rem; font-size:.8rem; font-weight:600; white-space:nowrap;}
+  .ruta .sep{color:var(--muted); font-size:.8rem; padding:0 .1rem;}
+  .ruta .chip.tren{border-style:dashed; color:var(--agua);}
+  .ruta .chip.bosque{background:transparent; border-color:var(--verde); color:var(--verde);}
+  .ruta .chip.shab{background:var(--oro-bg); border-color:var(--oro-line); color:var(--oro);}
+
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:4px; background:var(--panel);}
+  table{border-collapse:collapse; width:100%; min-width:560px; font-size:.9rem;}
+  th{
+    text-align:left; font-size:.72rem; text-transform:uppercase; letter-spacing:.09em;
+    color:var(--muted); font-weight:600; padding:.55rem .7rem; border-bottom:2px solid var(--line);
+  }
+  td{padding:.5rem .7rem; border-bottom:1px solid var(--line); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  td.num{font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:600;}
+  .reco td{background:color-mix(in srgb, var(--verde) 8%, transparent);}
+
+  .alerta{background:var(--alert-bg); border-radius:4px; padding:.75rem .95rem; margin:.9rem 0; max-width:70ch;}
+  .alerta .tag{font-weight:700; color:var(--ladrillo); text-transform:uppercase; font-size:.72rem; letter-spacing:.1em; font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .alerta p{margin:.25rem 0 0;}
+
+  .semana{margin:2rem 0 0;}
+  .semana > h3{border-bottom:2px solid var(--line); padding-bottom:.35rem;}
+  .dia{
+    display:grid; grid-template-columns:44px 92px 1fr; gap:.65rem;
+    padding:.65rem 0; border-bottom:1px solid var(--line); align-items:start;
+  }
+  .dia:last-child{border-bottom:none;}
+  .nodo{
+    width:34px; height:34px; border-radius:50%; background:var(--node); color:var(--node-ink);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.85rem;
+    margin-top:.1rem; font-variant-numeric:tabular-nums;
+  }
+  .fecha{font-size:.8rem; font-weight:600; line-height:1.3; padding-top:.25rem;}
+  .fecha em{display:block; font-style:normal; color:var(--muted); font-weight:400; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;}
+  .dia .cuerpo p{margin:.15rem 0 0; max-width:none;}
+  .dia .metas{display:flex; flex-wrap:wrap; gap:.3rem; margin:0 0 .15rem;}
+  .chip{display:inline-block; background:var(--chip-bg); border-radius:999px; padding:.1rem .55rem; font-size:.72rem; font-weight:600; white-space:nowrap;}
+  .chip.km{color:var(--verde);}
+  .chip.lab{color:var(--agua);}
+  .chip.auto{color:var(--ladrillo); border:1px dashed var(--line); background:transparent;}
+  .chip.tren{color:var(--agua); border:1px dashed var(--line); background:transparent;}
+  .chip.hike{color:var(--ladrillo);}
+  .dia.shabat{
+    background:var(--oro-bg); border:1px solid var(--oro-line); border-radius:6px;
+    padding:.65rem .7rem; margin:.5rem 0;
+  }
+  .dia.shabat .nodo{background:var(--oro); color:var(--panel);}
+  .dia.shabat .chip{background:transparent; border:1px solid var(--oro-line); color:var(--oro);}
+  .velas{font-size:.8rem; color:var(--oro); font-weight:600;}
+
+  ol.ck{list-style:none; padding:0; margin:.8rem 0; counter-reset:ck;}
+  ol.ck li{
+    counter-increment:ck; display:grid; grid-template-columns:30px 1fr; gap:.6rem;
+    padding:.5rem 0; border-bottom:1px solid var(--line); align-items:start;
+  }
+  ol.ck li::before{
+    content:counter(ck); font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;
+    width:24px; height:24px; border-radius:50%; background:var(--node); color:var(--node-ink);
+    display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; margin-top:.1rem;
+  }
+  ul{padding-left:1.2rem;} li{margin:.25rem 0;}
+
+  footer{margin-top:3.5rem; border-top:3px double var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); max-width:70ch;}
+
+  @media (max-width:560px){
+    .dia{grid-template-columns:34px 1fr; }
+    .dia .fecha{grid-column:2;}
+    .dia .cuerpo{grid-column:2;}
+    table{min-width:480px;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<nav class="switch" aria-label="Version">
+  <span class="lbl">Version</span>
+  <a href="index.html">North (v1) · bike · islands</a>
+  <a href="v2.html">East (v2) · e-bike</a>
+  <span class="on">Car (v3) · on foot</span>
+</nav>
+<nav class="lang" aria-label="Language"><a href="v3.html" lang="es">ES</a><a class="on" href="v3-en.html" lang="en">EN</a><a href="v3-nl.html" lang="nl">NL</a></nav>
+
+<header class="hero">
+  <p class="eyebrow">Travel plan · detox on foot · v3 · car version + camping</p>
+  <h1>Car and tent: hiking all the way,<br>from Shabbat to Shabbat</h1>
+  <p class="sub">Monday <strong>10 August</strong> → Tuesday <strong>8 September 2026</strong>. The e-bike fell through, so the trip changes its DNA — and for the better: <strong>rental car + camping</strong> on the middle stretch (Nijmegen → Veluwe → IJssel → Drenthe → Groningen), <strong>no car in Amsterdam</strong>. The detox turns into <strong>hiking all the way</strong>: the national parks of the Veluwe, Veluwezoom, Dwingelderveld, Sallandse and Weerribben, a Wadden island on foot (Schiermonnikoog), the forests and glacial hills of Nijmegen and the valleys of Drenthe. <strong>Bikes rented by the day</strong> where the pedaling is worth it (the white bikes of the Hoge Veluwe, Drenthe). And — the heart of it, untouched — <strong>the four Shabbatot with community</strong>, in the center within walking distance of the sjoel: Nijmegen, Zwolle, Groningen and Amsterdam. You come back with two days of cushion before Rosh Hashanah (candle-lighting: Friday 11/9).</p>
+  <div class="stats">
+    <div class="stat"><b>30</b><span>days</span></div>
+    <div class="stat"><b>4</b><span>Shabbatot with community</span></div>
+    <div class="stat"><b>camping</b><span>on the road</span></div>
+    <div class="stat"><b>6</b><span>national parks</span></div>
+    <div class="stat"><b>hiking</b><span>all the way</span></div>
+  </div>
+  <div class="ruta" aria-label="Route summary">
+    <span class="chip">Amsterdam</span><span class="sep">→</span>
+    <span class="chip">Utrecht</span><span class="sep">→</span>
+    <span class="chip bosque">Heuvelrug</span><span class="sep">→</span>
+    <span class="chip shab">Nijmegen</span><span class="sep">→</span>
+    <span class="chip bosque">Hoge Veluwe</span><span class="sep">→</span>
+    <span class="chip">Zutphen</span><span class="sep">→</span>
+    <span class="chip">Deventer</span><span class="sep">→</span>
+    <span class="chip shab">Zwolle</span><span class="sep">→</span>
+    <span class="chip">Giethoorn</span><span class="sep">→</span>
+    <span class="chip bosque">Drenthe</span><span class="sep">→</span>
+    <span class="chip shab">Groningen</span><span class="sep">→</span>
+    <span class="chip tren">train</span><span class="sep">→</span>
+    <span class="chip shab">Amsterdam</span>
+  </div>
+</header>
+
+<section id="vuelos">
+  <p class="eyebrow">Step 1</p>
+  <h2>The ticket</h2>
+  <p>The <strong>outbound is sorted</strong>: <strong>Bluebird flight to Amsterdam</strong>, with <strong>arrival on Monday 10/8 at 18:00</strong>. <strong>The return is still to be decided (TBD)</strong> — the plan is to close the trip on <strong>8/9</strong> with two days of cushion before Rosh Hashanah (candle-lighting Friday 11/9).</p>
+  <div class="alerta"><span class="tag">Mind the afternoon arrival</span>
+    <p>Since you land at <strong>18:00</strong>, Monday is just <strong>train to Zuid + check-in + rest</strong> — the kosher spots are already closed. Shopping (Mouwes/Rimon) and the real start wait for <strong>Tuesday morning</strong>. Either way you reach the first Shabbat (Nijmegen, Fri 14/8) with plenty of margin.</p>
+  </div>
+</section>
+
+<section id="auto">
+  <p class="eyebrow">Step 2</p>
+  <h2>The car (rental ~3 weeks: Wed 12/8 → Wed 2/9)</h2>
+  <p>The clean play: <strong>no car in Amsterdam</strong> (parking is brutally expensive, milieuzone) — the city is done on foot and by tram. <strong>You pick the car up only when you head out to Nijmegen</strong> and <strong>return it before coming back</strong> to Amsterdam for the last Shabbat. A compact automatic is more than enough; the route is all motorway and provincial road, no tolls (the Netherlands has almost none).</p>
+  <div class="alerta"><span class="tag">What you need to know about driving in NL</span>
+    <p>① <strong>License + IDP</strong>: bring the International Driving Permit along with your license — they may ask for it when you pick up the car. ② <strong>Parking, not access</strong>: a modern rental car meets the milieuzones of Amsterdam/Utrecht/Arnhem without any trouble; the issue is the <strong>cost</strong> of parking in the centers. Use <strong>garages and P+R</strong> (park-and-ride on the edge + transit to the center, cheap). ③ <strong>Never leave luggage in view</strong>. ④ Gas ~€2/L; budget the fuel separately. ⑤ <strong>On Shabbat the car stays parked</strong> — book lodging within walking distance of the sjoel, with parking included or a garage nearby.</p>
+  </div>
+  <p class="small muted">Pick-up and drop-off: the easiest is a depot on the edge of Amsterdam or at <strong>Schiphol</strong> (well connected by train). You return it at Schiphol on Wed 2/9 and go into Amsterdam by train for the last Shabbat. ~21 rental days.</p>
+</section>
+
+<section id="dormir">
+  <p class="eyebrow">Step 3</p>
+  <h2>Where to sleep</h2>
+  <div class="alerta"><span class="tag">The rule that orders everything</span>
+    <p><strong>Camping on road nights · center for the 4 Shabbatot.</strong> On Shabbat you don't drive or pitch/break down a tent, and you have to <strong>walk to the sjoel</strong> — so the Shabbat nights go in a hotel/apartment in the center, right by the community. The rest of the nights, camping.</p>
+  </div>
+  <ul>
+    <li><strong>Camping (road nights)</strong> — Dutch campgrounds are on another level. Look for <strong>boerencampings</strong> (farm camping, small and quiet) and <strong>Natuurkampeerterreinen</strong> (deep in nature — they require the Natuurkampeerkaart, ~€23/year). Concrete, verified options: <strong>Minicamping Wylerberg</strong> or <strong>Boerderijcamping Nederrijkswald</strong> (Berg en Dal, at the foot of the Duivelsberg); <strong>NK Rheden 'Veluwezoom'</strong> (in the walled garden of the Heuven estate, at the foot of the Posbank — with a barn-shelter for rainy days); <strong>NK Lheederzand</strong> or <strong>Camping Meistershof</strong> (Dwingelderveld); <strong>Minicamping De Slamme</strong> (Weerribben). The car carries the whole tent without any fuss.</li>
+    <li><strong>Center, by the sjoel (the 4 Shabbat nights)</strong> — Nijmegen, Zwolle, Groningen and Amsterdam: <strong>book now</strong>, with parking/garage nearby (the car stays put from candle-lighting to Havdalah).</li>
+    <li><strong>Amsterdam (no car)</strong> — near Kastelenstraat/Zuid, 2-3 nights at the start + the closing. The kosher axis within reach. (If you want camping here too: Gaasper Camping, with metro to the center.)</li>
+  </ul>
+  <p class="small muted">Gear: with a car there's no weight limit — bring the tent or buy the basics on day one at a <strong>Decathlon</strong> (there are stores in Amsterdam/Utrecht) and donate it at the end. August has ~11 days with some rain: a good tent and a sleeping bag rated for 10 °C. <strong>Rain plan B:</strong> book a <strong>trekkershut</strong> (basic camping cabin) as backup — Drenthe is full of them (Meistershof has one) and they range from bare-bones to fridge-equipped.</p>
+</section>
+
+<section id="kosher">
+  <p class="eyebrow">The hard constraint — and the heart of the plan</p>
+  <h2>Kosher and Shabbat, city by city</h2>
+  <p>The trip is <strong>routed around the Jewish infrastructure</strong>: each Shabbat falls in a city with an active synagogue. The detail to confirm by email is <strong>which Saturday in August each one holds <em>dienst</em></strong> (Zwolle and Groningen alternate weeks).</p>
+  <div class="scroll"><table>
+    <tr><th>City</th><th>What's there (verified Aug-2026)</th></tr>
+    <tr><td><strong>Nijmegen</strong><br><span class="small muted">Shabbat 1</span></td><td>A community you <strong>already know</strong>. <strong>NIG Nijmegen</strong>, a historic synagogue at <strong>Nonnenstraat 19-21</strong>, with a service (dienst) <strong>every two weeks</strong> (info@synagoge-nijmegen.nl). Plus <strong>Chabad in Nijmegen</strong> — gold for a traveler: hospitality, meals, more reliable minyan. No dedicated kosher store: NIK list at AH/Jumbo; best to bring <strong>wine and challah with a hechsher from Amsterdam</strong>. Contact: personal, you already have the connection.</td></tr>
+    <tr><td><strong>Zwolle</strong><br><span class="small muted">Shabbat 2</span></td><td>Active community, synagogue at <strong>Samuel Hirschstraat 8</strong>, with a <strong>biweekly service (dienst)</strong> on Saturday morning (spring to autumn in the big sjoel). Contact: joodsegemeentezwolle@ziggo.nl. No kosher store: NIK list at AH/Jumbo.</td></tr>
+    <tr><td><strong>Groningen</strong><br><span class="small muted">Shabbat 3</span></td><td>The sjoel at <strong>Folkingestraat 60</strong> is the active NIG Groningen, with a <strong>biweekly service (dienst)</strong> on Saturday morning. Write to <strong>info@nig-groningen.nl</strong> to find out which Saturday it falls on and to let them know about the visit. No kosher store: NIK list at AH/Jumbo. <strong>Careful: outside Amsterdam there is no eruv</strong> — you don't carry on Shabbat, so sort out the lodging key ahead of time.</td></tr>
+    <tr><td><strong>Amsterdam</strong><br><span class="small muted">Shabbat 4 · closing</span></td><td>The axis is <strong>Kastelenstraat (Buitenveldert)</strong>: Mouwes (deli), Rimon (bakery+supermarket), Davids Corner; the Jumbo at Kastelenstraat 70 with a large kosher aisle. Restaurants: Machane Yehuda and Meat Me (meat), Pizza &amp; Co (dairy). Shuls: <strong>Rav Aron Schuster / Obrechtsjoel (Heinzestraat 1-3, Zuid)</strong> and the Sephardi Esnoga (register with passport, arrive before 10:30). <strong>Chabad (Albert Cuypstraat 165)</strong>: "Shabbat TO GO" by ordering until Wednesday 22:00. <strong>There is an eruv</strong> (center + Buitenveldert) — confirm its status on Friday via the NIHS eruv line.</td></tr>
+  </table></div>
+  <div class="alerta"><span class="tag">Three key facts</span>
+    <p>① <strong>One rabbi for the north</strong>: Groningen and Zwolle share the NIK's traveling rabbi, <strong>Shmuel Spiero</strong> — one contact unlocks both weekends. Nijmegen has its own community + Chabad. ② <strong>NIK's Kasjroetlijst</strong> (kasjroet.nik.nl + the "Is it Kosher" app): covers Albert Heijn, Jumbo, Dirk and Ekoplaza, including AH's own brands — with that you sort out self-catering in any town. ③ On Fridays the kosher spots in Amsterdam close 13:30–16:00: the shopping for the last Shabbat is done early.</p>
+  </div>
+  <h3>Candle-lighting for the 4 Shabbatot (exact by city, Hebcal)</h3>
+  <div class="scroll"><table>
+    <tr><th>Shabbat</th><th>Where</th><th>Candle-lighting</th><th>Havdalah</th></tr>
+    <tr><td>14–15 Aug</td><td>Nijmegen</td><td class="num">20:44</td><td class="num">21:57</td></tr>
+    <tr><td>21–22 Aug</td><td>Zwolle</td><td class="num">20:30</td><td class="num">21:42</td></tr>
+    <tr><td>28–29 Aug</td><td>Groningen</td><td class="num">20:14</td><td class="num">21:25</td></tr>
+    <tr><td>4–5 Sep</td><td>Amsterdam</td><td class="num">20:03</td><td class="num">21:12</td></tr>
+  </table></div>
+</section>
+
+<section id="itinerario">
+  <p class="eyebrow">The heart of the plan</p>
+  <h2>Day by day</h2>
+  <p>Detox rhythm: <strong>work in the morning (≈9–13 h), hiking in the afternoon</strong>. The car only moves between campgrounds/bases (short hops, almost all &lt; 1 h) and does the day-trips; the days are <strong>walking in nature</strong>: forests, heathlands, valleys, historic old towns. <strong>⛺ = camping night · 🏠 = night in the center</strong> (the 4 Shabbat nights, by the sjoel). You rent a bike for a day or two wherever the pedaling adds something.</p>
+
+  <div class="semana">
+    <h3>Week 1 · 10–15 Aug — Landing, Amsterdam without a car, and off to Nijmegen for the first Shabbat</h3>
+    <div class="dia"><span class="nodo">1</span><div class="fecha">Mon 10/8<em>arrival</em></div><div class="cuerpo"><div class="metas"><span class="chip">✈ AMS 18:00</span><span class="chip tren">🚆 to Zuid</span></div><p>You land at 18:00 on Bluebird: train from Schiphol to Zuid (no car), check-in and rest. The kosher spots have already closed — shopping waits for tomorrow. Tefillin bag within reach.</p></div></div>
+    <div class="dia"><span class="nodo">2</span><div class="fecha">Tue 11/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">on foot</span></div><p>In the morning, <strong>kosher shopping</strong> at Mouwes/Rimon (Kastelenstraat) — include <strong>wine and challah</strong> to take to Nijmegen. Then, Amsterdam on foot and by tram: the canals, the Jordaan, a museum.</p></div></div>
+    <div class="dia"><span class="nodo">3</span><div class="fecha">Wed 12/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip auto">🚗 pick-up + ~1h15</span><span class="chip hike">forest</span></div><p><strong>You pick up the car</strong> (Schiphol or the edge of the city) and head southeast: Amsterdam → Utrecht (old town on foot) → a short hike in the <strong>Utrechtse Heuvelrug</strong> → <strong>Nijmegen</strong>. Check-in (3 nights).</p></div></div>
+    <div class="dia"><span class="nodo">4</span><div class="fecha">Thu 13/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">hill hike</span><span class="chip auto">⛺→🏠</span></div><p>Hiking in the glacial hills of the <strong>Rijk van Nijmegen</strong>: the <strong>Duivelsberg</strong> (Devil's hill, right on the German border) and the forests of Berg en Dal, with the <strong>Ooijpolder</strong> below. In the afternoon you move into the center (last tent → hotel by the sjoel). Buffer + Shabbat shopping.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">Fri 14 – Sat 15/8<em>shabbat 1</em></div><div class="cuerpo"><div class="metas"><span class="chip">Nijmegen</span><span class="velas">candle-lighting 20:44 · Havdalah 21:57</span></div><p><strong>Shabbat with the community you already know</strong> (NIG Nonnenstraat) and/or Chabad. Car parked; everything on foot. No eruv outside Amsterdam — lodging key sorted out.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Week 2 · 16–22 Aug — The Veluwe, the Hanseatic IJssel and Zwolle</h3>
+    <div class="dia"><span class="nodo">7</span><div class="fecha">Sun 16/8</div><div class="cuerpo"><div class="metas"><span class="chip auto">🚗 to the Veluwe</span><span class="chip km">🚲 white bike</span><span class="chip auto">⛺</span></div><p><strong>Big Veluwe day.</strong> In <strong>De Hoge Veluwe National Park</strong>, the <strong>free white bikes</strong> cross the heath to the <strong>Kröller-Müller museum</strong> (Van Gogh in the middle of the forest). And right next door, <strong>Veluwezoom National Park</strong>: hiking across the <strong>Posbank</strong>, the purple heather hills. Camping in the Veluwe area.</p></div></div>
+    <div class="dia"><span class="nodo">8</span><div class="fecha">Mon 17/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip auto">🚗 ~50 min</span><span class="chip auto">⛺</span></div><p>From the Veluwe → base camp near the <strong>IJssel</strong> (Deventer/Zwolle). In the afternoon: <strong>Zutphen</strong> on foot (the 16th-century "Library of the Chained Books").</p></div></div>
+    <div class="dia"><span class="nodo">9</span><div class="fecha">Tue 18/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">on foot</span></div><p><strong>Deventer</strong> on foot: medieval old town, the Bergkwartier, the Friday market... well, the day's market. The prettiest Hanseatic town on the river.</p></div></div>
+    <div class="dia"><span class="nodo">10</span><div class="fecha">Wed 19/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip auto">🚗 day-trip</span><span class="chip">🛶 fluisterboot</span></div><p><strong>Giethoorn</strong>, the "Venice of the North": electric boat along the canals (~€20/h, booked) + a walk along the boardwalks of the <strong>Weerribben-Wieden</strong> park.</p></div></div>
+    <div class="dia"><span class="nodo">11</span><div class="fecha">Thu 20/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">on foot</span></div><p><strong>Zwolle</strong> on foot: the star-shaped old town, the Sassenpoort, the canals; and Kampen or Hattem right nearby. Shabbat shopping.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">Fri 21 – Sat 22/8<em>shabbat 2</em></div><div class="cuerpo"><div class="metas"><span class="chip">Zwolle</span><span class="velas">candle-lighting 20:30 · Havdalah 21:42</span></div><p><strong>Shabbat with the Zwolle community</strong> (sjoel at Samuel Hirschstraat 8, biweekly service (dienst) — depending on the reply to the email). Car parked, old town on foot.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Week 3 · 23–29 Aug — Drenthe, heathlands, dolmens and Groningen</h3>
+    <div class="dia"><span class="nodo">14</span><div class="fecha">Sun 23/8</div><div class="cuerpo"><div class="metas"><span class="chip auto">🚗 ~1h</span><span class="chip hike">heath</span></div><p>Zwolle → <strong>Dwingelderveld</strong> (Drenthe), the largest wet heathland in western Europe: a walk along the boardwalks with the purple heather in bloom. Base in Groningen (or Drenthe).</p></div></div>
+    <div class="dia"><span class="nodo">15</span><div class="fecha">Mon 24/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip km">🚲 rented bike</span><span class="chip auto">⛺</span></div><p><strong>Drenthe on a bike rented by the day</strong> — the most bikeable province in the country: the route of the <strong>hunebedden</strong> (5,000-year-old dolmens; the D27 next to the Hunebedcentrum, the free-access loose ones) and the valley of the <strong>Drentsche Aa</strong>. Camping in Drenthe.</p></div></div>
+    <div class="dia"><span class="nodo">16</span><div class="fecha">Tue 25/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">on foot</span></div><p><strong>Groningen</strong> on foot: the liveliest student city in the north, a compact old town. A relaxed first look around.</p></div></div>
+    <div class="dia"><span class="nodo">17</span><div class="fecha">Wed 26/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">full work day</span></div><p>A full office day at the <strong>Forum Groningen</strong> (the most spectacular library-building in the north, free wifi — one of the best free offices in Europe).</p></div></div>
+    <div class="dia"><span class="nodo">18</span><div class="fecha">Thu 27/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip auto">🚗 day-trip</span></div><p>Optional: <strong>Lauwersoog</strong> (seal center, dark-sky park) or the Hogeland of medieval churches on man-made mounds. Shabbat shopping.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">Fri 28 – Sat 29/8<em>shabbat 3</em></div><div class="cuerpo"><div class="metas"><span class="chip">Groningen</span><span class="velas">candle-lighting 20:14 · Havdalah 21:25</span></div><p><strong>Shabbat with NIG Groningen</strong>: the Folkingestraat sjoel holds a biweekly service (dienst) — depending on the reply to the email. A compact old town, a treat to walk. No eruv: key sorted out.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Week 4 · 30 Aug – 5 Sep — A Wadden island on foot, the Salland hills, and back for the last Shabbat</h3>
+    <div class="dia"><span class="nodo">21</span><div class="fecha">Sun 30/8</div><div class="cuerpo"><div class="metas"><span class="chip auto">🚗 to Lauwersoog</span><span class="chip tren">⛴ ferry</span><span class="chip hike">island hike</span><span class="chip auto">⛺</span></div><p>Groningen → Lauwersoog, and ferry to <strong>Schiermonnikoog</strong>, an island-national park <strong>with no cars</strong> (you leave the car at the port): hiking across the dunes and the <strong>widest beach in Europe</strong>. You return to the mainland; camping near Lauwersoog.</p></div></div>
+    <div class="dia"><span class="nodo">22</span><div class="fecha">Mon 31/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip auto">🚗 south</span><span class="chip hike">hill hike</span><span class="chip auto">⛺</span></div><p>Heading south with a hiking stop in <strong>Sallandse Heuvelrug National Park</strong>: the Holterberg, heather hills — one of the few bits of relief in the country. Camping in the area.</p></div></div>
+    <div class="dia"><span class="nodo">23</span><div class="fecha">Tue 1/9</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">last hike</span><span class="chip auto">⛺ last tent</span></div><p>Last day of nature to your taste: another stretch of the Sallandse, or wrap up with the <strong>Utrechtse Heuvelrug</strong> on the way. Last camping night.</p></div></div>
+    <div class="dia"><span class="nodo">24</span><div class="fecha">Wed 2/9<em>drop-off</em></div><div class="cuerpo"><div class="metas"><span class="chip auto">🚗 to Schiphol</span><span class="chip tren">🚆 to Zuid</span></div><p><strong>You return the car at Schiphol</strong> and go into Amsterdam by train (~20 min to Zuid). Check-in on the kosher axis; no car for the rest of the trip.</p></div></div>
+    <div class="dia"><span class="nodo">25</span><div class="fecha">Thu 3/9</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span><span class="chip hike">on foot</span></div><p>Amsterdam on foot/by tram: the museums and neighborhoods still on the list. <strong>Shabbat shopping early</strong> (the kosher spots close 13:30–16:00). Optional: Chabad's "Shabbat TO GO".</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">Fri 4 – Sat 5/9<em>shabbat 4</em></div><div class="cuerpo"><div class="metas"><span class="chip">Amsterdam</span><span class="velas">candle-lighting 20:03 · Havdalah 21:12</span></div><p><strong>Closing with the big community</strong>: Rav Aron Schuster / Obrechtsjoel or the Esnoga; kosher axis within reach and an eruv (confirm on Friday). The last Shabbat in the city where it all began.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Week 5 · 6–8 Sep — Wrap-up and return</h3>
+    <div class="dia"><span class="nodo">28</span><div class="fecha">Sun 6/9</div><div class="cuerpo"><div class="metas"><span class="chip">optional</span></div><p>Wildcard day: museums, last shopping, or a walk you didn't get to. Work if it's urgent.</p></div></div>
+    <div class="dia"><span class="nodo">29</span><div class="fecha">Mon 7/9</div><div class="cuerpo"><div class="metas"><span class="chip lab">work AM</span></div><p>Pack the bag, close out loose ends.</p></div></div>
+    <div class="dia"><span class="nodo">30</span><div class="fecha">Tue 8/9<em>return</em></div><div class="cuerpo"><div class="metas"><span class="chip">✈ return to TLV · TBD</span></div><p>Last day in Amsterdam. <strong>The return flight is still to be booked</strong> — the plan is to leave on 8/9 in the evening and close with <strong>two days of cushion before Rosh Hashanah</strong> (candle-lighting Fri 11/9).</p></div></div>
+  </div>
+</section>
+
+<section id="hikes">
+  <p class="eyebrow">Hiking all the way</p>
+  <h2>Walk menu</h2>
+  <p>The best ones by region, with rough distances; almost all start from a <em>bezoekerscentrum</em> (visitor center) with parking and a map, and are color-marked.</p>
+  <div class="scroll"><table>
+    <tr><th>Region (day)</th><th>Walk</th><th>≈ Dist.</th><th>What it is</th></tr>
+    <tr><td>Utrechtse Heuvelrug <span class="small muted">(day 3)</span></td><td>Forest trails from Amerongen/Doorn</td><td class="num">6–8 km</td><td>First real forest, on the way to Nijmegen</td></tr>
+    <tr class="reco"><td>Rijk van Nijmegen <span class="small muted">(day 4)</span></td><td>Rondje Berg en Dal / Duivelsberg</td><td class="num">8 km</td><td>The steepest moraine in the country, viewpoints, the eagle owl; long variant "Trage Tocht" 15 km</td></tr>
+    <tr><td>Weerribben-Wieden <span class="small muted">(day 10)</span></td><td>Boardwalks over water and peat</td><td class="num">5–9 km</td><td>The largest peat wetland in NW Europe</td></tr>
+    <tr class="reco"><td>Veluwezoom <span class="small muted">(day 7)</span></td><td>Posbank loop from the Bezoekerscentrum Rheden</td><td class="num">5 km</td><td>Purple heather hills and viewpoints; the De Posbank Pavilion for lunch</td></tr>
+    <tr><td>De Hoge Veluwe <span class="small muted">(day 7)</span></td><td>Trails + free white bikes</td><td class="num">as you like</td><td>Heath and forest all the way to the Kröller-Müller museum</td></tr>
+    <tr><td>Dwingelderveld <span class="small muted">(day 14)</span></td><td>Routes from the Bezoekerscentrum Ruinen</td><td class="num">6–10 km</td><td>The largest wet heathland in NL; sometimes you cross a shepherd with his flock</td></tr>
+    <tr><td>Drentsche Aa <span class="small muted">(day 15)</span></td><td>Stream valley (on foot or by rented bike)</td><td class="num">variable</td><td>National landscape of meanders, meadows and burial mounds</td></tr>
+    <tr class="reco"><td>Schiermonnikoog <span class="small muted">(day 21)</span></td><td>Island-national park, no cars (ferry from Lauwersoog)</td><td class="num">10+ km</td><td>Dunes and the widest beach in Europe</td></tr>
+    <tr><td>Sallandse Heuvelrug <span class="small muted">(day 22)</span></td><td>Holterberg from the visitor center</td><td class="num">6–10 km</td><td>Heather hills, one of the few bits of relief in the country</td></tr>
+  </table></div>
+  <p class="small muted">Rough distances — each center has short and long variants. Waterproof footwear: the wet heathland lives up to its name.</p>
+</section>
+
+<section id="logistica">
+  <p class="eyebrow">The fine print</p>
+  <h2>Fine logistics</h2>
+  <h3>Driving in the Netherlands</h3>
+  <ul>
+    <li><strong>Parking</strong>: expensive in the centers; use garages and P+R on the edge (with a combined transit fare). In Amsterdam, simply <strong>no car</strong>.</li>
+    <li><strong>Milieuzones (LEZ)</strong>: a modern rental meets them; the problem is the cost of parking, not the access.</li>
+    <li><strong>Tolls</strong>: practically none (only two tunnels, neither on this route). Gas ~€2/L.</li>
+    <li><strong>Documents</strong>: license + IDP, a credit card in the driver's name for the deposit, and insurance with broad coverage (CDW/theft).</li>
+  </ul>
+  <h3>Trains (for Amsterdam and the return)</h3>
+  <ul>
+    <li>You return the car at Schiphol and go into Amsterdam by train (~20 min to Zuid, no time restriction for foot passengers). To get around the city and for the day-trips, OV-chipkaart / contactless at the gate.</li>
+  </ul>
+  <h3>Camping and bike by the day</h3>
+  <ul>
+    <li><strong>Networks:</strong> boerencampings (farms) and <strong>Natuurkampeerterreinen</strong> (pure nature — Natuurkampeerkaart ~€23/year). Book August in advance; the best spots in the Veluwe and Drenthe go fast.</li>
+    <li><strong>Gear:</strong> with a car there's no limit — bring the tent or buy it on day 1 at a Decathlon (Amsterdam/Utrecht). Sleeping bag for ~10 °C.</li>
+    <li><strong>Bike by the day:</strong> the white bikes of the Hoge Veluwe are free; in Drenthe and the IJssel towns there's rental by the day (a local rijwielhandel or the station's "fietsverhuur"). No need for a 4-week rental.</li>
+  </ul>
+  <h3>Weather and daylight</h3>
+  <ul>
+    <li>August: high 22–23 °C, low 13 °C, ~11 days with some rain → rain jacket, waterproof hiking footwear and a tent that can take the water.</li>
+    <li>Candle-lighting for the first Shabbat (Nijmegen) falls at 20:44 and drops ~13 min per week down to 20:03 in Amsterdam.</li>
+  </ul>
+  <h3>Remote work</h3>
+  <ul>
+    <li>Libraries with free wifi all along the route: Utrecht, Deventer, Zwolle and the unmissable <strong>Forum Groningen</strong>. Amsterdam's OBA uses Publicroam (set up once).</li>
+    <li>An EU data eSIM as the main network (buy it before leaving).</li>
+  </ul>
+  <h3>Apps to download before leaving</h3>
+  <ul>
+    <li><strong>Flitsmeister</strong> (speed cameras and road alerts) · <strong>ANWB</strong> (roadside assistance and parking) · <strong>Kasjroetlijst NIK / "Is it Kosher"</strong> · <strong>Hebcal</strong> (candle-lighting by city) · the <strong>NS</strong> app · <strong>Buienradar</strong> (the national rain radar) · bookings: hogeveluwe.nl (park + Kröller-Müller), the Giethoorn boat.</li>
+  </ul>
+</section>
+
+<section id="presupuesto">
+  <p class="eyebrow">The numbers</p>
+  <h2>Estimated budget (1 person, 30 days)</h2>
+  <div class="scroll"><table>
+    <tr><th>Item</th><th>Estimate</th><th>Note</th></tr>
+    <tr><td>Ticket TLV ⇆ AMS</td><td class="num">US$ 638–732</td><td>SWISS/Lufthansa with a layover; + luggage if the fare is Light</td></tr>
+    <tr><td>Car ~21 days + gas</td><td class="num">€ 750–1,150</td><td>compact automatic (€550–870) + gas (€180–280)</td></tr>
+    <tr><td>Parking</td><td class="num">€ 120–220</td><td>garages/P+R at the anchors; zero in Amsterdam (no car)</td></tr>
+    <tr><td>Lodging 29 nights</td><td class="num">€ 1,400–2,200</td><td>camping on the road (~€22/night) + center for the 4 Shabbatot and Amsterdam</td></tr>
+    <tr><td>Camping gear + bike/day</td><td class="num">€ 120–280</td><td>tent/bag (Decathlon) or brought along, Natuurkampeerkaart, bike rental by the day</td></tr>
+    <tr><td>Food</td><td class="num">€ 900–1,300</td><td>Self-catering with the NIK list + kosher restaurants and Chabad</td></tr>
+    <tr><td>Ferry, tickets, extras</td><td class="num">€ 250–350</td><td>Schiermonnikoog ferry, Hoge Veluwe + Kröller-Müller, Hunebedcentrum, Giethoorn boat, city trains, eSIM</td></tr>
+    <tr><td><strong>Total</strong></td><td class="num"><strong>≈ € 4,100–5,700</strong></td><td>≈ US$ 4,500–6,300</td></tr>
+  </table></div>
+</section>
+
+<section id="checklist">
+  <p class="eyebrow">This week, before Sunday</p>
+  <h2>Booking checklist</h2>
+  <ol class="ck">
+    <li><strong>Ticket</strong> — outbound sorted (Bluebird, arrival Mon 10/8 18:00); <strong>book the return</strong> (TBD, aiming for 8/9 evening).</li>
+    <li><strong>Book the car</strong> — compact automatic, pick-up Wed 12/8 (Schiphol/edge), drop-off Wed 2/9 at Schiphol; broad insurance (CDW+theft). <strong>Get the IDP</strong> (International Driving Permit) before leaving.</li>
+    <li><strong>The Shabbat emails</strong> (the heart of the plan): <strong>Nijmegen</strong> — personal contact with the community you know + Chabad for 14-15/8. <strong>Zwolle</strong> (joodsegemeentezwolle@ziggo.nl) and <strong>Groningen</strong> (info@nig-groningen.nl): ask about the August <em>dienst</em> schedule and confirm minyan/meals; the north's traveling rabbi is Shmuel Spiero.</li>
+    <li><strong>Book the 4 Shabbat nights in the center</strong>, within walking distance of each sjoel (Nijmegen, Zwolle, Groningen, Amsterdam) with parking nearby, + Amsterdam at the start.</li>
+    <li><strong>Road campgrounds</strong>: get the <strong>Natuurkampeerkaart</strong> and book the August sites (Veluwe/Veluwezoom, Drenthe, IJssel) — they go fast. Decide on the <strong>tent</strong>: bring it or buy it on day 1 at Decathlon.</li>
+    <li><strong>Nature tickets</strong>: De Hoge Veluwe + Kröller-Müller museum (Sun 16/8), the Giethoorn boat (Wed 19/8) and the <strong>ferry to Schiermonnikoog</strong> (Sun 30/8 — check tide/ferry times from Lauwersoog).</li>
+    <li><strong>EU data eSIM + travel insurance</strong> that covers car rental and hiking — and share the itinerary with your wife.</li>
+    <li><strong>Bring from Amsterdam</strong>: wine and challah with a hechsher for the first Shabbat in Nijmegen (there's no kosher store there).</li>
+  </ol>
+</section>
+
+<footer>
+  <p><strong>v3 · car version + camping</strong> (5-Aug-2026) — it <strong>complements</strong> the <a href="index.html">north version (v1)</a> and the <a href="v2.html">east version on e-bike (v2)</a>, it doesn't replace them. Reframe at the traveler's request: the e-bike fell through → car + camping on the middle stretch, no car in Amsterdam, and the detox becomes hiking all the way with a bike rented by the day. Shabbatot anchored to community and to the center by the sjoel (Nijmegen, Zwolle, Groningen, Amsterdam), untouched. Flight sorted (Bluebird, arrival 10/8 at 18:00); communities, candle-lighting times (Hebcal) and logistics verified against official sites (NIK/communities, De Hoge Veluwe, NS). Car/lodging rates and exact <em>dienst</em> dates remain <strong>to be confirmed</strong>. Anything marked ≈ is an estimate. Happy trails. 🥾</p>
+</footer>
+
+</div>
+
+</body>
+</html>

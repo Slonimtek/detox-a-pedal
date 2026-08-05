@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="Detox a pedal v2 — versión este: ríos, bosques y cuatro comunidades judías por el interior de Países Bajos, de Shabat en Shabat, en e-bike.">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Detox a pedal v2 — versión este · 9 ago → 8 sep 2026</title>
+<style>
+  :root{
+    --ground:#f5f6f0; --panel:#fcfcf8; --ink:#212820; --muted:#5c675a;
+    --line:#d8dccd; --node:#2d6a45; --node-ink:#ffffff;
+    --verde:#2d6a45; --ladrillo:#a8432c; --agua:#43677f;
+    --oro:#8f6c1d; --oro-bg:#f4ebd4; --oro-line:#dfd0a4;
+    --chip-bg:#e9ece1; --alert-bg:#f4e4de;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --ground:#141813; --panel:#1b211a; --ink:#e6eae0; --muted:#9ba795;
+      --line:#2d352b; --node:#356f4c; --node-ink:#f2f6ee;
+      --verde:#72b08c; --ladrillo:#d78f77; --agua:#8fb2c8;
+      --oro:#d4ae60; --oro-bg:#272113; --oro-line:#4a3d1e;
+      --chip-bg:#252c23; --alert-bg:#31211c;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#141813; --panel:#1b211a; --ink:#e6eae0; --muted:#9ba795;
+    --line:#2d352b; --node:#356f4c; --node-ink:#f2f6ee;
+    --verde:#72b08c; --ladrillo:#d78f77; --agua:#8fb2c8;
+    --oro:#d4ae60; --oro-bg:#272113; --oro-line:#4a3d1e;
+    --chip-bg:#252c23; --alert-bg:#31211c;
+  }
+  :root[data-theme="light"]{
+    --ground:#f5f6f0; --panel:#fcfcf8; --ink:#212820; --muted:#5c675a;
+    --line:#d8dccd; --node:#2d6a45; --node-ink:#ffffff;
+    --verde:#2d6a45; --ladrillo:#a8432c; --agua:#43677f;
+    --oro:#8f6c1d; --oro-bg:#f4ebd4; --oro-line:#dfd0a4;
+    --chip-bg:#e9ece1; --alert-bg:#f4e4de;
+  }
+  html{background:var(--ground);}
+  body{
+    font-family:Charter,"Bitstream Charter","Iowan Old Style",Georgia,serif;
+    color:var(--ink); line-height:1.55; margin:0; padding:0 1.1rem 4rem;
+    font-size:1.02rem;
+  }
+  .wrap{max-width:860px; margin:0 auto;}
+  a{color:var(--agua); text-decoration-thickness:1px; text-underline-offset:2px;}
+  a:focus-visible{outline:2px solid var(--verde); outline-offset:2px; border-radius:2px;}
+
+  .ut, th, .chip, .nodo, .eyebrow, .fecha, .stat b, .stat span, .ck-num{
+    font-family:"Avenir Next",Avenir,"Segoe UI","Helvetica Neue",Arial,sans-serif;
+  }
+  .eyebrow{
+    text-transform:uppercase; letter-spacing:.14em; font-size:.72rem; font-weight:600;
+    color:var(--verde); margin:0 0 .3rem;
+  }
+  h1,h2,h3{font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif; text-wrap:balance; line-height:1.15;}
+  h1{font-size:clamp(1.9rem,5vw,2.7rem); margin:.2rem 0 .4rem; font-weight:700;}
+  h2{font-size:1.45rem; margin:0 0 .8rem;}
+  h3{font-size:1.12rem; margin:1.4rem 0 .5rem;}
+  p{margin:.55rem 0; max-width:68ch;}
+  .muted{color:var(--muted);}
+  .small{font-size:.85rem;}
+
+  .switch{display:flex; gap:.35rem; align-items:center; padding-top:1rem; flex-wrap:wrap;}
+  .switch a, .switch span.on{font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .55rem;}
+  .switch span.on{background:var(--node); color:var(--node-ink); border-color:var(--node);}
+  .switch .lbl{border:none; padding:0 .2rem 0 0; color:var(--muted); font-weight:600; letter-spacing:.1em; text-transform:uppercase; font-size:.66rem;}
+  .lang{display:flex; gap:.35rem; justify-content:flex-end; margin-bottom:-1.6rem;}
+  .lang a{font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif; font-size:.72rem; font-weight:700; letter-spacing:.06em; text-decoration:none; color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:.15rem .55rem;}
+  .lang a.on{background:var(--node); color:var(--node-ink); border-color:var(--node);}
+  header.hero{padding:1.4rem 0 1.4rem; border-bottom:3px double var(--line);}
+  .hero .sub{font-size:1.08rem; max-width:60ch; margin-top:.5rem;}
+
+  section{margin:2.4rem 0; scroll-margin-top:1rem;}
+
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:.7rem; margin:1.4rem 0 0;}
+  .stat{background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:.7rem .8rem;}
+  .stat b{display:block; font-size:1.35rem; font-weight:700; font-variant-numeric:tabular-nums;}
+  .stat span{font-size:.75rem; text-transform:uppercase; letter-spacing:.08em; color:var(--muted);}
+
+  .ruta{display:flex; flex-wrap:wrap; gap:.35rem .2rem; align-items:center; margin:.8rem 0 0;}
+  .ruta .chip{background:var(--chip-bg); border:1px solid var(--line); border-radius:999px; padding:.18rem .6rem; font-size:.8rem; font-weight:600; white-space:nowrap;}
+  .ruta .sep{color:var(--muted); font-size:.8rem; padding:0 .1rem;}
+  .ruta .chip.tren{border-style:dashed; color:var(--agua);}
+  .ruta .chip.bosque{background:transparent; border-color:var(--verde); color:var(--verde);}
+  .ruta .chip.shab{background:var(--oro-bg); border-color:var(--oro-line); color:var(--oro);}
+
+  .scroll{overflow-x:auto; border:1px solid var(--line); border-radius:4px; background:var(--panel);}
+  table{border-collapse:collapse; width:100%; min-width:560px; font-size:.9rem;}
+  th{
+    text-align:left; font-size:.72rem; text-transform:uppercase; letter-spacing:.09em;
+    color:var(--muted); font-weight:600; padding:.55rem .7rem; border-bottom:2px solid var(--line);
+  }
+  td{padding:.5rem .7rem; border-bottom:1px solid var(--line); vertical-align:top;}
+  tr:last-child td{border-bottom:none;}
+  td.num{font-variant-numeric:tabular-nums; white-space:nowrap; font-weight:600;}
+  .reco td{background:color-mix(in srgb, var(--verde) 8%, transparent);}
+
+  .alerta{background:var(--alert-bg); border-radius:4px; padding:.75rem .95rem; margin:.9rem 0; max-width:70ch;}
+  .alerta .tag{font-weight:700; color:var(--ladrillo); text-transform:uppercase; font-size:.72rem; letter-spacing:.1em; font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;}
+  .alerta p{margin:.25rem 0 0;}
+
+  .semana{margin:2rem 0 0;}
+  .semana > h3{border-bottom:2px solid var(--line); padding-bottom:.35rem;}
+  .dia{
+    display:grid; grid-template-columns:44px 92px 1fr; gap:.65rem;
+    padding:.65rem 0; border-bottom:1px solid var(--line); align-items:start;
+  }
+  .dia:last-child{border-bottom:none;}
+  .nodo{
+    width:34px; height:34px; border-radius:50%; background:var(--node); color:var(--node-ink);
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.85rem;
+    margin-top:.1rem; font-variant-numeric:tabular-nums;
+  }
+  .fecha{font-size:.8rem; font-weight:600; line-height:1.3; padding-top:.25rem;}
+  .fecha em{display:block; font-style:normal; color:var(--muted); font-weight:400; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;}
+  .dia .cuerpo p{margin:.15rem 0 0; max-width:none;}
+  .dia .metas{display:flex; flex-wrap:wrap; gap:.3rem; margin:0 0 .15rem;}
+  .chip{display:inline-block; background:var(--chip-bg); border-radius:999px; padding:.1rem .55rem; font-size:.72rem; font-weight:600; white-space:nowrap;}
+  .chip.km{color:var(--verde);}
+  .chip.lab{color:var(--agua);}
+  .chip.tren{color:var(--agua); border:1px dashed var(--line); background:transparent;}
+  .chip.hike{color:var(--ladrillo);}
+  .dia.shabat{
+    background:var(--oro-bg); border:1px solid var(--oro-line); border-radius:6px;
+    padding:.65rem .7rem; margin:.5rem 0;
+  }
+  .dia.shabat .nodo{background:var(--oro); color:var(--panel);}
+  .dia.shabat .chip{background:transparent; border:1px solid var(--oro-line); color:var(--oro);}
+  .velas{font-size:.8rem; color:var(--oro); font-weight:600;}
+
+  ol.ck{list-style:none; padding:0; margin:.8rem 0; counter-reset:ck;}
+  ol.ck li{
+    counter-increment:ck; display:grid; grid-template-columns:30px 1fr; gap:.6rem;
+    padding:.5rem 0; border-bottom:1px solid var(--line); align-items:start;
+  }
+  ol.ck li::before{
+    content:counter(ck); font-family:"Avenir Next",Avenir,"Segoe UI",sans-serif;
+    width:24px; height:24px; border-radius:50%; background:var(--node); color:var(--node-ink);
+    display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:700; margin-top:.1rem;
+  }
+  ul{padding-left:1.2rem;} li{margin:.25rem 0;}
+
+  footer{margin-top:3.5rem; border-top:3px double var(--line); padding-top:1rem; font-size:.85rem; color:var(--muted); max-width:70ch;}
+
+  @media (max-width:560px){
+    .dia{grid-template-columns:34px 1fr; }
+    .dia .fecha{grid-column:2;}
+    .dia .cuerpo{grid-column:2;}
+    table{min-width:480px;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto;} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<nav class="switch" aria-label="Versión">
+  <span class="lbl">Versión</span>
+  <a href="index.html">↑ Norte (v1) · islas del Wadden</a>
+  <span class="on">Este (v2) · ríos y bosques</span>
+</nav>
+<nav class="lang" aria-label="Idioma"><a class="on" href="v2.html" lang="es">ES</a><a href="v2-en.html" lang="en">EN</a><a href="v2-nl.html" lang="nl">NL</a></nav>
+
+<header class="hero">
+  <p class="eyebrow">Plan de viaje · detox a pedal · v2 · versión este</p>
+  <h1>Al este: ríos, bosques hanseáticos<br>y cuatro comunidades, de Shabat en Shabat</h1>
+  <p class="sub">Domingo <strong>9 de agosto</strong> → martes <strong>8 de septiembre de 2026</strong>. Un loop desde Ámsterdam por el interior: el Waal y el Rijn, los bosques de la <strong>Utrechtse Heuvelrug</strong> y la <strong>Veluwe</strong>, las lomas glaciares de Nijmegen, las ciudades hanseáticas del <strong>IJssel</strong> (Zutphen, Deventer), los canales de Giethoorn, los dólmenes de 5.000 años de Drenthe y Groninga. <strong>E-bike de alquiler</strong> (las lomas dejan de contar), laburo remoto a la mañana, pedal a la tarde, y — el corazón de esta versión — <strong>los cuatro Shabatot con comunidad</strong>: Nijmegen, Zwolle, Groninga y Ámsterdam. Volvés con dos días de colchón antes de Rosh Hashaná (velas: viernes 11/9).</p>
+  <div class="stats">
+    <div class="stat"><b>30</b><span>días</span></div>
+    <div class="stat"><b>≈700 km</b><span>en e-bike</span></div>
+    <div class="stat"><b>4</b><span>Shabatot con comunidad</span></div>
+    <div class="stat"><b>2</b><span>parques nacionales</span></div>
+    <div class="stat"><b>1</b><span>tren de vuelta</span></div>
+  </div>
+  <div class="ruta" aria-label="Ruta resumida">
+    <span class="chip">Ámsterdam</span><span class="sep">→</span>
+    <span class="chip">Utrecht</span><span class="sep">→</span>
+    <span class="chip bosque">Heuvelrug</span><span class="sep">→</span>
+    <span class="chip shab">Nijmegen</span><span class="sep">→</span>
+    <span class="chip bosque">Hoge Veluwe</span><span class="sep">→</span>
+    <span class="chip">Zutphen</span><span class="sep">→</span>
+    <span class="chip">Deventer</span><span class="sep">→</span>
+    <span class="chip shab">Zwolle</span><span class="sep">→</span>
+    <span class="chip">Giethoorn</span><span class="sep">→</span>
+    <span class="chip bosque">Drenthe</span><span class="sep">→</span>
+    <span class="chip shab">Groninga</span><span class="sep">→</span>
+    <span class="chip tren">tren</span><span class="sep">→</span>
+    <span class="chip shab">Ámsterdam</span>
+  </div>
+</header>
+
+<section id="vuelos">
+  <p class="eyebrow">Paso 1</p>
+  <h2>El pasaje</h2>
+  <p>Cotizado en vivo el 2/8 en Google Flights para <strong>TLV ⇆ AMS, dom 9/8 → mar 8/9</strong>. Dato duro: <strong>ese día no aparece ningún vuelo directo</strong> (hay aviso de restricciones de espacio aéreo; ni KLM ni El Al directo figuran). Las opciones reales:</p>
+  <div class="scroll"><table>
+    <tr><th>Opción</th><th>Ida (dom 9/8)</th><th>Vuelta (mar 8/9)</th><th>Precio i/v</th></tr>
+    <tr class="reco"><td><strong>SWISS vía Zúrich</strong> · la elegida</td><td>18:15 → 9:00 lun (escala nocturna larga en ZRH)</td><td>20:05 → 3:35 mié en TLV</td><td class="num">US$ 638</td></tr>
+    <tr><td>Lufthansa vía Múnich (vuelta)</td><td>—</td><td>17:00 → 0:35, escala 1 h 20</td><td class="num">US$ 641</td></tr>
+    <tr><td>Austrian vía Viena (vuelta)</td><td>—</td><td>17:40 → 0:45, escala 50 min</td><td class="num">US$ 732</td></tr>
+    <tr><td>SKY express vía Atenas · la rápida</td><td>7:00 → 13:10 <strong>el mismo domingo</strong> (7 h 10 total)</td><td>ídem combinable</td><td class="num">US$ 1.083</td></tr>
+    <tr><td>Air France/KLM vía París</td><td>16:30 → 8:35 lun</td><td>—</td><td class="num">US$ 836</td></tr>
+  </table></div>
+  <div class="alerta"><span class="tag">Antes de comprar</span>
+    <p>① Chequeá <strong>elal.com</strong> directo — a veces El Al no publica todo su inventario en Google. ② La vuelta SWISS del 8/9 a las 20:05 te deja el último día entero en Ámsterdam y aterrizás el miércoles 3:35, dos días antes de Rosh Hashaná. ③ Verificá que la tarifa incluya valija en bodega (las "Light" no). ④ Si valés el día extra: SKY express llega el domingo 13:10 y ganás casi una jornada, por unos US$ 445 más.</p>
+  </div>
+</section>
+
+<section id="bici">
+  <p class="eyebrow">Paso 2</p>
+  <h2>La e-bike (alquiler 4 semanas: lun 10/8 → lun 7/9)</h2>
+  <p>Esta versión va sobre <strong>e-bike de trekking con portaequipaje</strong>: con la Utrechtse Heuvelrug, la Veluwe y la <em>stuwwal</em> de Nijmegen en la ruta, el motor convierte las lomas en anécdota y te estira el rango a <strong>60–100 km por carga</strong> — margen de sobra para "laburo AM, pedal PM". <strong>Ningún local publica tarifa mensual de e-bike; pedí cotización por mail — para 4 semanas casi seguro baja del prorrateo diario.</strong></p>
+  <div class="scroll"><table>
+    <tr><th>Local</th><th>Bici</th><th>≈ 28 días</th><th>Incluye / nota</th></tr>
+    <tr class="reco"><td><strong>rentabike.nl</strong> (Damstraat 20-22) · la práctica</td><td>E-bike de turismo con portaequipaje</td><td class="num">pedir cotización</td><td>Es el que arma el <strong>kit completo</strong> (alforjas impermeables, casco, 2 candados, cargador, guardado de equipaje). Confirmá alforjas 30–40 L y cargador incluido.</td></tr>
+    <tr><td><strong>MacBike</strong> (info@macbike.nl)</td><td>E-bike urbana/trekking</td><td class="num">pedir cotización</td><td>Amplia flota y sucursales; reservá touring/e-bike por mail y pedí alforjas + casco (no siempre publicados).</td></tr>
+    <tr><td><strong>Tour de Amsterdam</strong> (Donker Curtiusstraat 9) · la premium</td><td>E-trekking de gama alta</td><td class="num">pedir cotización</td><td>Ajuste y kit de calidad. Si querés alforjas serias, comprá unas Ortlieb Back-Roller (~€100) en De Vakantiefietser y llevátelas.</td></tr>
+  </table></div>
+  <div class="alerta"><span class="tag">Lo que cambia con e-bike</span>
+    <p>① <strong>Carga cada noche</strong>: los anfitriones de Vrienden op de Fiets y los hoteles no tienen drama con el cargador; llevá el cargador y un adaptador. ② <strong>Autonomía real</strong> con alforjas cargadas y viento: contá 60–80 km por carga en modo eco/medio, no el número optimista del folleto. ③ Confirmá que el contrato permita <strong>alquiler largo one-way-friendly</strong> (devolvés en Ámsterdam igual, pero avisá el uso interurbano). ④ La ruta es 100% Países Bajos y asfaltada por <em>knooppunten</em>: cualquier service se resuelve en cualquier pueblo.</p>
+  </div>
+</section>
+
+<section id="dormir">
+  <p class="eyebrow">Paso 3</p>
+  <h2>Dónde dormir</h2>
+  <ul>
+    <li><strong>Vrienden op de Fiets</strong> — la red holandesa de habitaciones en casas de familia para ciclistas: <strong>€27,50 por noche con desayuno</strong>. Membresía €10/año para residentes en el exterior, acceso online al mapa. El corredor Utrecht–Veluwe–IJssel–Drenthe está lleno de direcciones — es TU red para las noches de ruta (y la carga de la e-bike).</li>
+    <li><strong>Hoteles/departamentos en las anclas</strong> — Ámsterdam (1 noche al inicio + ~1 semana al cierre, cerca de Kastelenstraat/Zuid, el eje kosher), <strong>Nijmegen, Zwolle y Groninga</strong> para los Shabatot. <strong>Reservá ya las cuatro noches de Shabat</strong>, a <em>distancia de caminata de la sjoel</em> de cada ciudad — en Shabat no hay auto ni transporte.</li>
+  </ul>
+</section>
+
+<section id="kosher">
+  <p class="eyebrow">La restricción dura — y el corazón de la v2</p>
+  <h2>Kosher y Shabat, ciudad por ciudad</h2>
+  <p>Esta versión está <strong>ruteada alrededor de la infraestructura judía</strong>: cada Shabat cae en una ciudad con sinagoga activa. El interior tiene comunidades chicas pero reales; el detalle a confirmar por mail es <strong>qué sábado de agosto le toca <em>dienst</em></strong> a cada una (Zwolle y Groninga alternan semanas).</p>
+  <div class="scroll"><table>
+    <tr><th>Ciudad</th><th>Qué hay (verificado ago-2026)</th></tr>
+    <tr><td><strong>Nijmegen</strong><br><span class="small muted">Shabat 1</span></td><td>Comunidad que <strong>ya conocés</strong>. <strong>NIG Nijmegen</strong>, sinagoga histórica en <strong>Nonnenstraat 19-21</strong>, con <strong>dienst cada dos semanas</strong> (info@synagoge-nijmegen.nl). Además <strong>Chabad en Nijmegen</strong> — oro para un viajero: hospitalidad, comidas, minyan más confiable. Sin tienda kosher dedicada: lista NIK en AH/Jumbo; conviene llevar <strong>vino y jalá con hechsher desde Ámsterdam</strong>. Contacto: personal, ya tenés el vínculo.</td></tr>
+    <tr><td><strong>Zwolle</strong><br><span class="small muted">Shabat 2</span></td><td>Comunidad activa, sinagoga en <strong>Samuel Hirschstraat 8</strong>, con <strong>dienst quincenal</strong> de sábado a la mañana (de primavera a otoño en la sjoel grande). Contacto: joodsegemeentezwolle@ziggo.nl. Sin tienda kosher: lista NIK en AH/Jumbo.</td></tr>
+    <tr><td><strong>Groninga</strong><br><span class="small muted">Shabat 3</span></td><td>La sjoel de <strong>Folkingestraat 60</strong> es la NIG Groningen activa, con <strong>dienst quincenal</strong> de sábado a la mañana. Escribir a <strong>info@nig-groningen.nl</strong> para saber qué sábado toca y avisar la visita. Sin tienda kosher: lista NIK en AH/Jumbo. <strong>Ojo: fuera de Ámsterdam no hay eruv</strong> — no se carga en Shabat, dejá resuelta la llave del alojamiento.</td></tr>
+    <tr><td><strong>Ámsterdam</strong><br><span class="small muted">Shabat 4 · cierre</span></td><td>El eje es <strong>Kastelenstraat (Buitenveldert)</strong>: Mouwes (deli), Rimon (panadería+súper), Davids Corner; Jumbo de Kastelenstraat 70 con góndola kosher grande. Restaurantes: Machane Yehuda y Meat Me (carne), Pizza &amp; Co (lácteo). Shuls: <strong>Rav Aron Schuster / Obrechtsjoel (Heinzestraat 1-3, Zuid)</strong> y la Esnoga sefaradí (registro con pasaporte, llegar antes de 10:30). <strong>Jabad (Albert Cuypstraat 165)</strong>: "Shabbat TO GO" pidiendo hasta el miércoles 22:00. <strong>Hay eruv</strong> (centro + Buitenveldert) — confirmá el estado el viernes en la línea del eruv de la NIHS.</td></tr>
+  </table></div>
+  <div class="alerta"><span class="tag">Tres datos clave</span>
+    <p>① <strong>Un solo rabino para el norte</strong>: Groninga y Zwolle comparten al rabino itinerante del NIK, <strong>Shmuel Spiero</strong> — un contacto destraba los dos findes. Nijmegen tiene comunidad propia + Chabad. ② <strong>Kasjroetlijst del NIK</strong> (kasjroet.nik.nl + app "Is it Kosher"): cubre Albert Heijn, Jumbo, Dirk y Ekoplaza, incluidas marcas propias de AH — con eso resolvés el self-catering en cualquier pueblo (básicos, pescado, lácteos con hechsher, pan verificado). ③ Los viernes lo kosher de Ámsterdam cierra 13:30–16:00: las compras de la última Shabat se hacen temprano.</p>
+  </div>
+  <h3>Velas de los 4 Shabatot (exactas por ciudad, Hebcal)</h3>
+  <div class="scroll"><table>
+    <tr><th>Shabat</th><th>Dónde</th><th>Velas</th><th>Havdalá</th></tr>
+    <tr><td>14–15 ago</td><td>Nijmegen</td><td class="num">20:44</td><td class="num">21:57</td></tr>
+    <tr><td>21–22 ago</td><td>Zwolle</td><td class="num">20:30</td><td class="num">21:42</td></tr>
+    <tr><td>28–29 ago</td><td>Groninga</td><td class="num">20:14</td><td class="num">21:25</td></tr>
+    <tr><td>4–5 sep</td><td>Ámsterdam</td><td class="num">20:03</td><td class="num">21:12</td></tr>
+  </table></div>
+</section>
+
+<section id="itinerario">
+  <p class="eyebrow">El corazón del plan</p>
+  <h2>Día × día</h2>
+  <p>Ritmo detox: <strong>laburo a la mañana (≈9–13 h), pedal a la tarde</strong>. Con e-bike, las lomas de la Heuvelrug, la Veluwe y la <em>stuwwal</em> de Nijmegen son parte del paisaje, no del esfuerzo; el viento dominante del suroeste te ayuda subiendo el IJssel al norte. Todo asfaltado por red de nodos (<em>knooppunten</em>). Km aproximados y con colchón — sobra margen para estirar o acortar un día.</p>
+
+  <div class="semana">
+    <h3>Semana 1 · 9–15 ago — Aterrizar, rodar al sureste, primera Shabat en Nijmegen</h3>
+    <div class="dia"><span class="nodo">1</span><div class="fecha">dom 9/8<em>vuelo</em></div><div class="cuerpo"><div class="metas"><span class="chip">✈ TLV 18:15</span></div><p>SWISS a Zúrich; noche en tránsito. Bolsa de tefilín y lo esencial a mano.</p></div></div>
+    <div class="dia"><span class="nodo">2</span><div class="fecha">lun 10/8<em>ámsterdam</em></div><div class="cuerpo"><div class="metas"><span class="chip">✈ AMS 9:00</span><span class="chip lab">laburo liviano</span></div><p>Tren a la ciudad, check-in en Zuid. A la tarde: retirar e-bike + alforjas (fitting), y compras kosher en Mouwes/Rimon (Kastelenstraat) — incluí <strong>vino y jalá</strong> para llevar a Nijmegen.</p></div></div>
+    <div class="dia"><span class="nodo">3</span><div class="fecha">mar 11/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈55 km</span></div><p>Arranca la ruta hacia el sureste: Ámsterdam → el Vecht (casas señoriales sobre el río) → <strong>Utrecht</strong>. Tarde en la ciudad de los canales a dos niveles. Noche: Utrecht.</p></div></div>
+    <div class="dia"><span class="nodo">4</span><div class="fecha">mié 12/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈60 km</span><span class="chip hike">bosque</span></div><p>Utrecht → <strong>Utrechtse Heuvelrug</strong> (primer bosque de verdad, colinas suaves) → el Rijn en Rhenen/Wageningen. Noche zona Wageningen.</p></div></div>
+    <div class="dia"><span class="nodo">5</span><div class="fecha">jue 13/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈45 km</span></div><p>Wageningen → el Waal → <strong>Nijmegen</strong>, la ciudad más vieja del país. <strong>Llegás con un día de colchón</strong> (regla de oro en bici: nunca dependas del viernes). Compras de Shabat (lista NIK en AH/Jumbo) y tocar a la comunidad / Chabad para confirmar horarios.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">vie 14 – sáb 15/8<em>shabat 1</em></div><div class="cuerpo"><div class="metas"><span class="chip">Nijmegen</span><span class="velas">velas 20:44 · havdalá 21:57</span></div><p>Viernes tranquilo, compras temprano, cena. <strong>Shabat con la comunidad que ya conocés</strong> (NIG Nonnenstraat) y/o Chabad. Sábado a pie: el Valkhof (la colina histórica sobre el río) y el casco medieval. Sin eruv fuera de Ámsterdam — llave del alojamiento resuelta.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Semana 2 · 16–22 ago — Bosques de Nijmegen, la Veluwe y el IJssel hasta Zwolle</h3>
+    <div class="dia"><span class="nodo">8</span><div class="fecha">dom 16/8</div><div class="cuerpo"><div class="metas"><span class="chip km">≈40 km</span><span class="chip hike">bosques</span></div><p><strong>El día de los bosques de Nijmegen</strong>: el Rijk van Nijmegen, Groesbeek y Berg en Dal (las lomas glaciares), miradores, y la <strong>Ooijpolder</strong> junto al río — naturaleza fluvial a la vuelta de la esquina. Segunda noche en Nijmegen.</p></div></div>
+    <div class="dia"><span class="nodo">9</span><div class="fecha">lun 17/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈50 km</span><span class="chip hike">parque</span></div><p>Cruzar a <strong>Arnhem</strong> → <strong>Parque Nacional De Hoge Veluwe</strong>: bici blanca gratis para recorrerlo, brezales y bosque, y el <strong>museo Kröller-Müller</strong> (Van Gogh en medio del bosque). Noche en Arnhem/Veluwezoom.</p></div></div>
+    <div class="dia"><span class="nodo">10</span><div class="fecha">mar 18/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈45 km</span></div><p>Arnhem → subir el <strong>IJssel</strong> → <strong>Zutphen</strong>, ciudad hanseática con la "Librería de las cadenas" del s. XVI. Noche: Zutphen.</p></div></div>
+    <div class="dia"><span class="nodo">11</span><div class="fecha">mié 19/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈35 km</span></div><p>Zutphen → <strong>Deventer</strong>, quizá la hanseática más linda del río: casco medieval, la Bergkwartier. Noche: Deventer.</p></div></div>
+    <div class="dia"><span class="nodo">12</span><div class="fecha">jue 20/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈45 km</span></div><p>Deventer → Hattem → <strong>Zwolle</strong> por el IJssel. <strong>Llegás con colchón.</strong> Compras de Shabat (lista NIK) y ubicar la sjoel.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">vie 21 – sáb 22/8<em>shabat 2</em></div><div class="cuerpo"><div class="metas"><span class="chip">Zwolle</span><span class="velas">velas 20:30 · havdalá 21:42</span></div><p><strong>Shabat con la kehilá de Zwolle</strong> (sjoel de Samuel Hirschstraat 8, dienst quincenal — según la respuesta al mail). Sábado a pie: el casco en estrella, la Sassenpoort, los canales.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Semana 3 · 23–29 ago — Canales, turberas, dólmenes y Groninga</h3>
+    <div class="dia"><span class="nodo">15</span><div class="fecha">dom 23/8</div><div class="cuerpo"><div class="metas"><span class="chip km">≈35 km</span><span class="chip">🛶 fluisterboot</span></div><p>Zwolle → <strong>Giethoorn</strong>, la "Venecia del norte": pueblo sin calles, todo canales y puentecitos. Bote eléctrico (~€20/h, reservado). Noche en la zona.</p></div></div>
+    <div class="dia"><span class="nodo">16</span><div class="fecha">lun 24/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈40 km</span><span class="chip hike">pasarelas</span></div><p><strong>Weerribben-Wieden</strong>, el parque nacional de turberas más grande de Europa occidental: pasarelas entre juncales y agua. Rumbo a Drenthe.</p></div></div>
+    <div class="dia"><span class="nodo">17</span><div class="fecha">mar 25/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈45 km</span><span class="chip hike">brezal</span></div><p>→ <strong>Dwingelderveld</strong>, el brezal húmedo más grande de Europa occidental (acceso libre): caminata por las pasarelas con el brezo morado en su pico de floración. Noche en Drenthe.</p></div></div>
+    <div class="dia"><span class="nodo">18</span><div class="fecha">mié 26/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈40 km</span></div><p>→ <strong>Borger</strong>, capital de los <strong>hunebedden</strong> — dólmenes de 5.000 años, anteriores a las pirámides. El D27 (el más grande) está pegado al Hunebedcentrum; los sueltos por la ruta son de acceso libre.</p></div></div>
+    <div class="dia"><span class="nodo">19</span><div class="fecha">jue 27/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈45 km</span></div><p>Drenthe → <strong>Groninga</strong> por el Hondsrug. <strong>Llegás con colchón.</strong> Compras de Shabat (lista NIK; sin tienda kosher) y ubicar Folkingestraat.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">vie 28 – sáb 29/8<em>shabat 3</em></div><div class="cuerpo"><div class="metas"><span class="chip">Groninga</span><span class="velas">velas 20:14 · havdalá 21:25</span></div><p><strong>Shabat con la NIG Groningen</strong>: la sjoel de Folkingestraat tiene dienst quincenal — según la respuesta al mail. Casco viejo compacto, un lujo para caminar. Sin eruv: llave resuelta.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Semana 4 · 30 ago – 5 sep — Groninga, vuelta a Ámsterdam y última Shabat</h3>
+    <div class="dia"><span class="nodo">22</span><div class="fecha">dom 30/8</div><div class="cuerpo"><div class="metas"><span class="chip km">≈35 km</span></div><p>Loop suave por el <strong>Groninger Hogeland</strong>: los pueblos de iglesias medievales sobre montículos (Garmerwolde, Ten Boer), o descanso en la ciudad.</p></div></div>
+    <div class="dia"><span class="nodo">23</span><div class="fecha">lun 31/8</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo full</span></div><p>Día completo de oficina en el <strong>Forum Groningen</strong> (la biblioteca-edificio más espectacular del norte, wifi libre — de las mejores oficinas gratuitas de Europa). Última noche en Groninga.</p></div></div>
+    <div class="dia"><span class="nodo">24</span><div class="fecha">mar 1/9<em>tren</em></div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip tren">🚆 IC + bici €7,95</span></div><p>Tren Groninga → Ámsterdam con la bici (~2 h 20; salida ~10:00 para entrar en la ventana válida — desde el 1/9 la bici no viaja 6:30–9:00 ni 16:00–18:30). Check-in en Zuid, de nuevo en el eje kosher.</p></div></div>
+    <div class="dia"><span class="nodo">25</span><div class="fecha">mié 2/9</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span><span class="chip km">≈40 km</span></div><p>Ámsterdam a pedal suave: Waterland (Durgerdam – Marken – Volendam) o el Amsterdamse Bos. Ciudad conocida, ritmo bajo.</p></div></div>
+    <div class="dia"><span class="nodo">26</span><div class="fecha">jue 3/9</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span></div><p>Museos o últimas vueltas. <strong>Compras de Shabat temprano</strong> (lo kosher cierra 13:30–16:00). Opcional: pedido "Shabbat TO GO" a Jabad si no querés cocinar.</p></div></div>
+    <div class="dia shabat"><span class="nodo">✡</span><div class="fecha">vie 4 – sáb 5/9<em>shabat 4</em></div><div class="cuerpo"><div class="metas"><span class="chip">Ámsterdam</span><span class="velas">velas 20:03 · havdalá 21:12</span></div><p><strong>Cierre con la comunidad grande</strong>: Rav Aron Schuster / Obrechtsjoel o la Esnoga; eje kosher a mano y eruv (confirmá el viernes). La última Shabat en la ciudad donde empezó todo.</p></div></div>
+  </div>
+
+  <div class="semana">
+    <h3>Semana 5 · 6–8 sep — Cierre y vuelta</h3>
+    <div class="dia"><span class="nodo">29</span><div class="fecha">dom 6/9</div><div class="cuerpo"><div class="metas"><span class="chip km">opcional</span></div><p>Día comodín: museos, últimas compras, o un pedal a Haarlem/las dunas o Zaanse Schans. Laburo si urge.</p></div></div>
+    <div class="dia"><span class="nodo">30</span><div class="fecha">lun 7/9</div><div class="cuerpo"><div class="metas"><span class="chip lab">laburo AM</span></div><p><strong>Devolver e-bike y alforjas</strong>, armar valija, cerrar pendientes.</p></div></div>
+    <div class="dia"><span class="nodo">31</span><div class="fecha">mar 8/9<em>vuelta</em></div><div class="cuerpo"><div class="metas"><span class="chip">✈ AMS 20:05 → TLV 3:35</span></div><p>Último día libre en Ámsterdam hasta la tarde. Aterrizás el miércoles de madrugada — <strong>dos días de colchón antes de Rosh Hashaná</strong> (velas vie 11/9).</p></div></div>
+  </div>
+</section>
+
+<section id="logistica">
+  <p class="eyebrow">Letra chica</p>
+  <h2>Logística fina</h2>
+  <h3>La e-bike, día a día</h3>
+  <ul>
+    <li><strong>Carga:</strong> enchufe cada noche en el alojamiento (Vrienden op de Fiets y hoteles, sin problema). Llevá cargador + adaptador de enchufe UE.</li>
+    <li><strong>Autonomía honesta:</strong> 60–80 km por carga con alforjas y algo de viento en modo eco/medio. Todas las etapas de esta ruta entran en una carga.</li>
+    <li><strong>Seguridad:</strong> dos candados (marco + rueda), y nunca dejar la batería a la vista. El seguro de robo del alquiler vale la pena.</li>
+  </ul>
+  <h3>Tren de vuelta con bici (NS)</h3>
+  <ul>
+    <li>Fietskaart Dal <strong>€7,95</strong>, todo el día, toda la red. <strong>Desde el 1/9</strong> rige el veto lu-vi 6:30–9:00 y 16:00–18:30 — tu tren del martes 1/9 (~10:00, Groninga → Ámsterdam) entra perfecto en la ventana válida. La bici sube solo por las puertas con símbolo. Confirmá que la e-bike entre (sí, como bici común; la batería no es problema).</li>
+  </ul>
+  <h3>Viento, clima y luz</h3>
+  <ul>
+    <li><strong>Viento dominante del suroeste</strong> (dato KNMI): de cola subiendo el IJssel al norte. Con e-bike, de todos modos, deja de ser un factor.</li>
+    <li>Agosto: máx. 22–23 °C, mín. 13 °C, ~11 días con algo de lluvia → campera de lluvia sí o sí.</li>
+    <li>En el interior las tardes son largas; las velas del primer Shabat (Nijmegen) caen 20:44 y van bajando ~13 min por semana hasta 20:03 en Ámsterdam.</li>
+  </ul>
+  <h3>Laburo remoto</h3>
+  <ul>
+    <li>Bibliotecas con wifi libre en toda la ruta: Utrecht, Deventer, Zwolle y el imperdible <strong>Forum Groningen</strong>. La OBA de Ámsterdam usa Publicroam (se configura una vez).</li>
+    <li>Wifi gratis en casi todos los Intercity de NS. eSIM de datos UE como red principal (comprar antes de salir).</li>
+  </ul>
+  <h3>Apps para bajar antes de salir</h3>
+  <ul>
+    <li><strong>Fietsknoop / Knooppuntnet</strong> (planificador por nodos) · <strong>Kasjroetlijst NIK / "Is it Kosher"</strong> · <strong>Hebcal</strong> (velas por ciudad) · app de <strong>NS</strong> · <strong>Buienradar</strong> (el radar de lluvia nacional, religión local) · reservas: hogeveluwe.nl (parque + Kröller-Müller), el bote de Giethoorn.</li>
+  </ul>
+</section>
+
+<section id="presupuesto">
+  <p class="eyebrow">Los números</p>
+  <h2>Presupuesto estimado (1 persona, 30 días)</h2>
+  <div class="scroll"><table>
+    <tr><th>Rubro</th><th>Estimado</th><th>Nota</th></tr>
+    <tr><td>Pasaje TLV ⇆ AMS</td><td class="num">US$ 638–732</td><td>SWISS/Lufthansa con escala; + valija si la tarifa es Light</td></tr>
+    <tr><td>E-bike + alforjas 28 días</td><td class="num">€ 700–950</td><td>e-bike de trekking; pedir cotización mensual, casi seguro baja del diario</td></tr>
+    <tr><td>Alojamiento 29 noches</td><td class="num">€ 1.600–2.200</td><td>~14 noches Vrienden op de Fiets (€27,50 c/desayuno) + hoteles en las 4 anclas de Shabat y Ámsterdam al cierre</td></tr>
+    <tr><td>Comida</td><td class="num">€ 900–1.300</td><td>Self-catering con lista NIK + restaurantes kosher y Chabad</td></tr>
+    <tr><td>Tren, entradas, extras</td><td class="num">€ 250–350</td><td>tren de vuelta, Hoge Veluwe + Kröller-Müller, Hunebedcentrum, bote Giethoorn, membresías, eSIM</td></tr>
+    <tr><td><strong>Total</strong></td><td class="num"><strong>≈ € 3.900–5.200</strong></td><td>≈ US$ 4.300–5.700</td></tr>
+  </table></div>
+</section>
+
+<section id="checklist">
+  <p class="eyebrow">Esta semana, antes del domingo</p>
+  <h2>Checklist de reservas</h2>
+  <ol class="ck">
+    <li><strong>Comprar el pasaje ya</strong> — SWISS US$ 638 (o SKY rápida si preferís llegar el domingo); antes, un vistazo a elal.com por si aparece el directo.</li>
+    <li><strong>Reservar la e-bike</strong> — mail a rentabike.nl / MacBike / Tour de Amsterdam pidiendo <strong>cotización mensual de e-bike con alforjas + casco + cargador</strong>, y reserva del kit completo como plan seguro.</li>
+    <li><strong>Los mails de Shabat</strong> (el corazón de la v2): <strong>Nijmegen</strong> — contacto personal con la comunidad que conocés + Chabad para el 14-15/8. <strong>Zwolle</strong> (joodsegemeentezwolle@ziggo.nl) y <strong>Groninga</strong> (info@nig-groningen.nl): preguntar por la agenda de <em>dienst</em> de agosto y confirmar minyan/comida; el rabino itinerante del norte es Shmuel Spiero.</li>
+    <li><strong>Alta en Vrienden op de Fiets</strong> (€10) y <strong>reservar las 4 noches de Shabat</strong> a distancia de caminata de cada sjoel: Nijmegen, Zwolle, Groninga y Ámsterdam.</li>
+    <li><strong>Entradas de naturaleza</strong>: De Hoge Veluwe + museo Kröller-Müller (lun 17/8), y el bote de Giethoorn (dom 23/8).</li>
+    <li><strong>eSIM de datos UE + seguro de viaje</strong> que cubra e-bike — y compartir el itinerario con tu esposa.</li>
+    <li><strong>Llevar de Ámsterdam</strong>: vino y jalá con hechsher para el primer Shabat en Nijmegen (allá no hay tienda kosher).</li>
+  </ol>
+</section>
+
+<footer>
+  <p><strong>v2 · versión este</strong> (5-ago-2026) — <strong>complementa</strong> la <a href="index.html">versión norte (v1)</a>, no la reemplaza. Reencuadre a pedido del viajero: Shabatot ancladas a comunidad (Nijmegen, Zwolle, Groninga, Ámsterdam), bici eléctrica, ríos y bosques del interior en lugar de las islas del Wadden. Precios de vuelos cotizados en Google Flights el 2-ago-2026 (cambian rápido); kehilot, horarios de velas (Hebcal) y logística verificados contra sitios oficiales (NIK/kehilot, De Hoge Veluwe, NS, Vrienden op de Fiets). Las tarifas de e-bike y las fechas exactas de <em>dienst</em> quedan <strong>a confirmar por mail</strong>. Lo marcado con ≈ es estimación. Buen viento — de cola. 🚴</p>
+</footer>
+
+</div>
+
+</body>
+</html>
